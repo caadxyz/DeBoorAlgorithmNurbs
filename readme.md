@@ -1,5 +1,7 @@
 # De Boor's Algorithm for NURBS Curve
 
+![diagram](images/diagram.png)
+
 * verion 0.0.1  
 * Copyright (c) 2019-2020 mahaidong
 * github https://github.com/mahaidong
@@ -18,6 +20,12 @@ This allows the user to see NURBS curves in its most general sense.
 De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/de-Boor.html
 
 ### install and use
+
+spline:
+![component](images/spline.png)
+
+nurbs circle
+![component](images/nurbsCircle.png)
 
 * start Grasshopper and drag+drop the ghpy files onto the canvas
 * open sample file  DeBoorAlgorithmNurbs.gh to see the result
