@@ -31,9 +31,11 @@ def findKnotIndexByU(u,knots):
 def getKnotValue(isPeriodic,knots,i):
     if isPeriodic == True:
         if i>=len(knots):
-            return knots[-1]+knots[i+1-len(knots)]
+            # return knots[-1]+knots[i+1-len(knots)]
+            return knots[-1]+(knots[i+1-len(knots)]-knots[0])
         elif i<0:
-            return -knots[-1]+knots[i-1]
+            #return -knots[-1]+knots[i-1]
+            return knots[0]-(knots[-1]-knots[len(knots)+i])
     return knots[i]
 
 
