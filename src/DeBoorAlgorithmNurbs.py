@@ -14,6 +14,7 @@ def calculatePoint4d(p0, factor0,p1,factor1):
         p0.Y*factor0+p1.Y*factor1,
         p0.Z*factor0+p1.Z*factor1,
         p0.W*factor0+p1.W*factor1)
+
 def findKnotIndexByU(u,knots):
     s = 0
     index = 0 
@@ -28,14 +29,15 @@ def findKnotIndexByU(u,knots):
             s += 1
     if s>0:
         return s,index
+
 def getKnotValue(isPeriodic,knots,i):
     if isPeriodic == True:
         if i>=len(knots):
             # return knots[-1]+knots[i+1-len(knots)]
-            return knots[-1]+(knots[i+1-len(knots)]-knots[0])
+            return knots[-1]+( knots[i+1-len(knots)]-knots[0] )
         elif i<0:
             #return -knots[-1]+knots[i-1]
-            return knots[0]-(knots[-1]-knots[len(knots)+i])
+            return knots[0]-( knots[-1]-knots[len(knots)+i-1] )
     return knots[i]
 
 
@@ -83,4 +85,5 @@ curvePoints = []
 for f in rs.frange(knots[0],knots[-1],1/20.0):
     pt,_ = calculateNurbsPoint(f)
     curvePoints.append(pt)
+
 pointAtU, deBoorlines = calculateNurbsPoint(u)
