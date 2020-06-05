@@ -1,14 +1,27 @@
 import rhinoscriptsyntax as rs
 import Rhino
+from TextGoo import TextGoo
 
 class BezierCurve(object):
 
     def __init__(self, pts):
         self.pts = pts
+        self.legend = []
+    
+    def basis(self):
+        n = len(self.pts)
+        for i in range(n):
+            if i == 0:
+                p = BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
+            else: 
+                p += BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
+
+
+        pass
 
     def calculatePoint( self, u ): 
         p = None
-        n = len(pts)
+        n = len(self.pts)
         for i in range(n):
             if i == 0:
                 p = BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
@@ -16,11 +29,12 @@ class BezierCurve(object):
                 p += BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
         return p
 
-    def draw(self,nums):
+    def drawCurvePts(self,nums):
         pts = []
         for i in range(nums+1):
             pts.append(rs.AddPoint( self.calculatePoint( i/float(nums) ) ) )
         return pts
+    
 
     @staticmethod
     def binomial(n, k):
@@ -40,4 +54,4 @@ class BezierCurve(object):
             return 0
 
 bc = BezierCurve(pts)
-curvePoints = bc.draw(nums)
+curvePoints = bc.drawCurvePts(nums)
