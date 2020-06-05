@@ -8,7 +8,7 @@ class BezierCurve(object):
 
     def calculatePoint( self, u ): 
         p = None
-        n = len(pts)
+        n = len(self.pts)
         for i in range(n):
             if i == 0:
                 p = BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
@@ -31,7 +31,7 @@ class BezierCurve(object):
         if 0 <= k <= n:
             ntok = 1
             ktok = 1
-            for t in xrange(1, min(k, n - k) + 1):
+            for t in range(1, min(k, n - k) + 1):
                 ntok *= n
                 ktok *= t
                 n -= 1
