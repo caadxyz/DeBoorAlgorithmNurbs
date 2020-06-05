@@ -21,6 +21,10 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
 
 ### install and use
 
+* copy ghuser file to User Objects Folder
+* open sample file  DeBoorAlgorithmNurbs.gh to see the result
+
+
 **bezier curve**:  
 ![component](images/bezier01.png)
 
@@ -29,9 +33,6 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
 
 **nurbs circle**:  
 ![component](images/nurbsCircle.png)
-
-* copy ghuser file to User Objects Folder
-* open sample file  DeBoorAlgorithmNurbs.gh to see the result
 
 ### License
 
