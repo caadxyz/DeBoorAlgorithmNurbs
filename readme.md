@@ -21,13 +21,13 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
 
 ### install and use
 
-bezier curve
+**bezier curve**:  
 ![component](images/bezier01.png)
 
-spline:
+**b-spline**:  
 ![component](images/spline.png)
 
-nurbs circle
+**nurbs circle**:  
 ![component](images/nurbsCircle.png)
 
 * copy ghuser file to User Objects Folder
