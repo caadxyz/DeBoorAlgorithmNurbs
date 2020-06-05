@@ -2,7 +2,7 @@
 
 ![diagram](images/diagram.png)
 
-* verion 0.0.1  
+* verion 0.0.2  
 * Copyright (c) 2019-2020 mahaidong
 * github https://github.com/mahaidong
 * Supported by ikuku.cn & caad.xyz 
@@ -21,13 +21,16 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
 
 ### install and use
 
+bezier curve
+![component](images/bezier01.png)
+
 spline:
 ![component](images/spline.png)
 
 nurbs circle
 ![component](images/nurbsCircle.png)
 
-* start Grasshopper and drag+drop the ghpy files onto the canvas
+* copy ghuser file to User Objects Folder
 * open sample file  DeBoorAlgorithmNurbs.gh to see the result
 
 ### License
