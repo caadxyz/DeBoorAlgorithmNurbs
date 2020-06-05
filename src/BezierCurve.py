@@ -1,24 +1,48 @@
+#coding=utf-8
+################################################################################
+# BezierCurve.py
+# Copyright (c) 2020.6 mahaidong
+# Supported by ikuku.cn & caad.xyz 
+# See License in the root of this repository for details.
+################################################################################
+
 import rhinoscriptsyntax as rs
 import Rhino
 from TextGoo import TextGoo
+import ghpythonlib.treehelpers as th
 
 class BezierCurve(object):
 
-    def __init__(self, pts):
+    def __init__(self, pts, textHeight):
         self.pts = pts
         self.legend = []
+        self.textHeight = textHeight
+        self.basisStr()
     
-    def basis(self):
+    def basisStr(self):
         n = len(self.pts)
         for i in range(n):
-            if i == 0:
-                p = BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
-            else: 
-                p += BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
+            text0 = BezierCurve.superscript("",'u',i)
+            text1 = BezierCurve.superscript(text0, '(1-u)',n-1-i)
+            if BezierCurve.binomial(n-1,i)==1:
+                text = text0+text1+"•P"+str(i)
+            else:
+                text = str(BezierCurve.binomial(n-1,i))+"•"+text0+text1+"•P"+str(i)
 
+            plane = Rhino.Geometry.Plane(self.pts[i], Rhino.Geometry.Vector3d(0,0,1))
+            text3d = TextGoo(Rhino.Display.Text3d( text, plane, self.textHeight ))
+            self.legend.append(text3d)
+    
+    def basisFunction(self,i,l, origin,nums ):
+        pts = []
+        n = len(self.pts)
+        for j in range(nums+1):
+            x = origin.X + l*j/nums
+            y = origin.Y + l*BezierCurve.binomial(n-1,i)*( (j/nums)**i)*((1-j/nums)**(n-1-i))
+            pts.append( Rhino.Geometry.Point3d(x,y,0) )
+        return pts
 
-        pass
-
+    # algorithm: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/notes.html
     def calculatePoint( self, u ): 
         p = None
         n = len(self.pts)
@@ -37,6 +61,27 @@ class BezierCurve(object):
     
 
     @staticmethod
+    def superscript(p,u,i):
+        result =""
+        if i==0:
+            pass
+        elif i==1:
+            result +=u 
+        elif i==2:
+            result +=u+'\xB2'
+        elif i==3:
+            result +=u+'\xB3'
+        else:
+            result +=u+'^'+str(i)
+        if p is "":
+            return result
+        else:
+            if result is "":
+                return ""
+            else:
+                return '•'+result
+
+    @staticmethod
     def binomial(n, k):
         """
         A fast way to calculate binomial coefficients by Andrew Dalke.
@@ -53,5 +98,16 @@ class BezierCurve(object):
         else:
             return 0
 
-bc = BezierCurve(pts)
+bc = BezierCurve(pts, textHeight)
+legend = bc.legend
 curvePoints = bc.drawCurvePts(nums)
+pointAtU = []
+pointAtU.append(bc.calculatePoint(u))
+pointAtU.append(funPosition+Rhino.Geometry.Point3d(u*funLength,0,0))
+
+basisFunction = []
+for i in range(len(pts)):
+    basisFunction.append(bc.basisFunction(i,funLength,funPosition,nums))
+basisFunction = th.list_to_tree(basisFunction, source=[0,0])
+
+
