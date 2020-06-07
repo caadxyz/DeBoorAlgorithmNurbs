@@ -8,8 +8,12 @@
 
 import rhinoscriptsyntax as rs
 import Rhino
+import os
+import sys
+sys.path.append( os.path.dirname( ghenv.Component.OnPingDocument().FilePath ) )
 from TextGoo import TextGoo
 import ghpythonlib.treehelpers as th
+
 
 class BezierCurve(object):
 
