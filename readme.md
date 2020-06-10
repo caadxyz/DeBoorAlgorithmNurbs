@@ -1,6 +1,6 @@
 # De Boor's Algorithm for NURBS Curve
 
-![diagram](images/diagram.png)
+![diagram](images/deboor-spline.gif)
 
 * verion 0.0.2  
 * Copyright (c) 2019-2020 mahaidong
@@ -24,15 +24,21 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
 * copy ghuser file to User Objects Folder
 * open sample file  DeBoorAlgorithmNurbs.gh to see the result
 
-
-**bezier curve**:  
-![component](images/bezier01.png)
-
 **b-spline**:  
 ![component](images/spline.png)
 
 **nurbs circle**:  
 ![component](images/nurbsCircle.png)
+
+**bezier curve**:  
+![component](images/spline5.gif)
+
+
+### todo
+
+ * Single Insertion 
+ * Inserting a Knot Multiple Times
+ * compute tangent and normal vectors at a point on a Bézier curve
 
 ### License
 

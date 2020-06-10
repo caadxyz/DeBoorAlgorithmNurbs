@@ -12,6 +12,10 @@ class TextGoo( gh.Kernel.Types.GH_GeometricGoo[Rhino.Display.Text3d],
     #region construction
     def __init__(self, text):
         self.m_value = text
+        self.color = None
+
+    def SetColor(self,color):
+        self.color = color
     
     @staticmethod
     def DuplicateText3d(original):
@@ -73,7 +77,9 @@ class TextGoo( gh.Kernel.Types.GH_GeometricGoo[Rhino.Display.Text3d],
         
     def DrawViewportWires(self, args):
         if self.m_value is None: return
-        args.Pipeline.Draw3dText(self.m_value, args.Color)
+        # args.Pipeline.Draw3dText(self.m_value, args.Color)
+        args.Pipeline.Draw3dText(self.m_value, self.color)
+        args.Pipeline.DrawPoint(self.m_value.TextPlane.Origin,self.color)
       
     def DrawViewportMeshes(self, args):
         # Do not draw in meshing layer.

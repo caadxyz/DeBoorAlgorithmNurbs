@@ -8,15 +8,23 @@
 
 import rhinoscriptsyntax as rs
 import Rhino
-from TextGoo import TextGoo
+from textGoo import TextGoo
+from pointGoo import PointGoo
 import ghpythonlib.treehelpers as th
+from System.Drawing import Color
+
+#debug
+import textGoo
+import pointGoo
+reload(textGoo)
+reload(pointGoo)
 
 class BezierCurve(object):
 
     def __init__(self, pts, textHeight):
         self.pts = pts
         self.legend = []
-        self.textHeight = textHeight
+        self.textHeight = textHeight 
         self.basisStr()
     
     def basisStr(self):
@@ -30,7 +38,9 @@ class BezierCurve(object):
                 text = str(BezierCurve.binomial(n-1,i))+"•"+text0+text1+"•P"+str(i)
 
             plane = Rhino.Geometry.Plane(self.pts[i], Rhino.Geometry.Vector3d(0,0,1))
-            text3d = TextGoo(Rhino.Display.Text3d( text, plane, self.textHeight ))
+            text3d = TextGoo( Rhino.Display.Text3d( text, plane, self.textHeight ))
+            hslColor = Rhino.Display.ColorHSL(i/(n+1),1,0.5)
+            text3d.SetColor(hslColor.ToArgbColor())
             self.legend.append(text3d)
     
     def basisFunction(self,i,l, origin,nums ):
@@ -53,10 +63,15 @@ class BezierCurve(object):
                 p += BezierCurve.binomial(n-1,i)*(u**i)*((1-u)**(n-1-i))*self.pts[i]
         return p
 
-    def drawCurvePts(self,nums):
+    def drawCurvePts(self,nums,u, colorLimit):
         pts = []
         for i in range(nums+1):
-            pts.append(rs.AddPoint( self.calculatePoint( i/float(nums) ) ) )
+            if i/float(nums+1)<=u:
+                pt = self.calculatePoint( i/float(nums) )
+                ptGoo = PointGoo(pt)
+                hslColor = Rhino.Display.ColorHSL( colorLimit*i/float(nums+1),1,0.5 )
+                ptGoo.SetColor(hslColor.ToArgbColor())
+                pts.append( ptGoo ) 
         return pts
     
 
@@ -100,14 +115,21 @@ class BezierCurve(object):
 
 bc = BezierCurve(pts, textHeight)
 legend = bc.legend
-curvePoints = bc.drawCurvePts(nums)
-pointAtU = []
-pointAtU.append(bc.calculatePoint(u))
-pointAtU.append(funPosition+Rhino.Geometry.Point3d(u*funLength,0,0))
+crvPoints = bc.drawCurvePts(nums,u,(len(pts)-1)/(len(pts)+1) )
+u2p = []
+u2p.append(bc.calculatePoint(u))
+u2p.append(funPosition+Rhino.Geometry.Point3d(u*funLength,0,0))
 
 basisFunction = []
 for i in range(len(pts)):
-    basisFunction.append(bc.basisFunction(i,funLength,funPosition,nums))
+    basisPts = bc.basisFunction(i,funLength,funPosition,nums) 
+    basisPtGooList = []
+    for pt in basisPts:
+        ptGoo = PointGoo(pt)
+        hslColor = Rhino.Display.ColorHSL(i/(len(pts)+1),1,0.5)
+        ptGoo.SetColor(hslColor.ToArgbColor())
+        basisPtGooList.append(ptGoo)
+    basisFunction.append( basisPtGooList )
 basisFunction = th.list_to_tree(basisFunction, source=[0,0])
 
 

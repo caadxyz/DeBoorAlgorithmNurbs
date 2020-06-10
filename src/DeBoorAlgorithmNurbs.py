@@ -7,6 +7,16 @@
 ################################################################################
 import rhinoscriptsyntax as rs
 import Rhino
+from textGoo import TextGoo
+from lineGoo import LineGoo
+import ghpythonlib.treehelpers as th
+from System.Drawing import Color
+
+# debug
+import textGoo
+import lineGoo
+reload(textGoo)
+reload(lineGoo)
 
 class DeBoorAlgorithmNurbs(object):
     def __init__( self,degree, pts,weights,knots,isPeriodic, isRational):
@@ -40,12 +50,16 @@ class DeBoorAlgorithmNurbs(object):
                 return self.knots[0]-( self.knots[-1]-self.knots[len(self.knots)+i-1] )
         return self.knots[i]
 
-    def calculateNurbsPoint(self,u):
-        lines = []
+    def calculateNurbsPoint(self,u, haveLines=0):
+        """
+        parameters:
+            havelines: 0=nolines, 1=drawLines
+        """
         p = self.degree
         s,k = self.findKnotIndexByU(u)
         h = p-s
         pt = {}
+        ptsGoo=[]
 
         # initialize pt[i][0] for starting calculation
         for i in range(k-p+1,k-s+2):
@@ -66,6 +80,13 @@ class DeBoorAlgorithmNurbs(object):
                 z = self.pts[j].Z
                 w = 1
             pt[i][0] = Rhino.Geometry.Point4d(x,y,z,w)
+            if haveLines==1:
+
+                plane = Rhino.Geometry.Plane(self.pts[j], Rhino.Geometry.Vector3d(0,0,1))
+                text3d = TextGoo( Rhino.Display.Text3d( "P"+str(i), plane, 3 ))
+                hslColor = Rhino.Display.ColorHSL(0,1,0.5)
+                text3d.SetColor(hslColor.ToArgbColor())
+                ptsGoo.append(text3d)
 
         def calculatePoint4d( p0, factor0,p1,factor1 ):
             return Rhino.Geometry.Point4d(
@@ -76,22 +97,38 @@ class DeBoorAlgorithmNurbs(object):
 
         # starting calculation
         a = {}
+        lines = []
         for r in range (1,h+1):
+            lines.append([])
             for i in range(k-p+r+1,k-s+2) :
                 a[i]={}
                 Vai_1  = self.getKnotValue( i-1 )
                 Vaip_r = self.getKnotValue( i+p-r )
                 a[i][r] = (u-Vai_1)/( Vaip_r-Vai_1)
                 pt[i][r] = calculatePoint4d( pt[i-1][r-1],(1-a[i][r]),pt[i][r-1],a[i][r] )
-                lines.append(rs.AddLine( 
-                    Rhino.Geometry.Point3d(pt[i-1][r-1]),
-                    Rhino.Geometry.Point3d(pt[i][r-1]) ))
-        return Rhino.Geometry.Point3d(pt[k-s+1][p-s]), lines
+                if haveLines == 1:
+                    line = Rhino.Geometry.Line(
+                        Rhino.Geometry.Point3d(pt[i-1][r-1]),
+                        Rhino.Geometry.Point3d(pt[i][r-1]) )
+                    lineGoo = LineGoo(line)
+                    hslColor = Rhino.Display.ColorHSL((r-1)/(h+1),1,0.5)
+                    lineGoo.SetColor(hslColor.ToArgbColor())
+                    lines[r-1].append(lineGoo)
+                    
+        return Rhino.Geometry.Point3d(pt[k-s+1][p-s]), ptsGoo, lines
+
+    # draw curves and lines
+    def drawNurbsCurvePts(self,nums,u):
+        pts = []
+        for f in rs.frange( self.knots[0],self.knots[-1],(self.knots[-1]-self.knots[0])/float(nums) ):
+            if f<u:
+                pt, _, _ = nurbs.calculateNurbsPoint(f)
+                pts.append(pt)
+        pointAtU, ptsGoo, deBoorlines = nurbs.calculateNurbsPoint(u,1)
+        return pts,pointAtU, ptsGoo, deBoorlines
+
 
 ### main ###
-curvePoints = []
 nurbs = DeBoorAlgorithmNurbs(degree, points, weights, knots, isPeriodic, isRational)
-for f in rs.frange( nurbs.knots[0],nurbs.knots[-1],1/20.0 ):
-    pt,_ = nurbs.calculateNurbsPoint(f)
-    curvePoints.append(pt)
-pointAtU, deBoorlines = nurbs.calculateNurbsPoint(u)
+curvePoints, pointAtU, deBoorPts, deBoorlines= nurbs.drawNurbsCurvePts(80,u)
+deBoorlines = th.list_to_tree( deBoorlines, source=[0,0])
