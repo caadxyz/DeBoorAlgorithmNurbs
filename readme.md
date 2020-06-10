@@ -9,7 +9,8 @@
 
 ### What is this?
 
-De Boor's Algorithm for Nurbs.
+* De Boor's Algorithm for Nurbs.
+* Bezier Curve with Bernstein Polynomial
 
 Gaining an intuitive understanding for NURBS is difficult without directly seeing the effects of different control point position, weight vectors, and  knot vectors.
 
@@ -32,7 +33,6 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
 
 **bezier curve**:  
 ![component](images/spline5.gif)
-
 
 ### todo
 
