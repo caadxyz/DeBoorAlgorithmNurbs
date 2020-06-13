@@ -39,6 +39,7 @@ De Boor's Algorithm reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES
  * Single Insertion 
  * Inserting a Knot Multiple Times
  * compute tangent and normal vectors at a point on a Bézier curve
+ * curve interpolation
 
 ### License
 
