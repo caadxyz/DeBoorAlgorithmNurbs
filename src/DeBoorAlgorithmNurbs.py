@@ -7,10 +7,14 @@
 ################################################################################
 import rhinoscriptsyntax as rs
 import Rhino
+from System.Drawing import Color
+import ghpythonlib.treehelpers as th
+
+import os
+import sys
+sys.path.append( os.path.dirname( ghenv.Component.OnPingDocument().FilePath ) )
 from textGoo import TextGoo
 from lineGoo import LineGoo
-import ghpythonlib.treehelpers as th
-from System.Drawing import Color
 
 # debug
 import textGoo

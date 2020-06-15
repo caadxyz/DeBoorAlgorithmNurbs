@@ -8,16 +8,14 @@
 
 import rhinoscriptsyntax as rs
 import Rhino
-from textGoo import TextGoo
-from pointGoo import PointGoo
-import ghpythonlib.treehelpers as th
 from System.Drawing import Color
 
-"""
 import os
 import sys
 sys.path.append( os.path.dirname( ghenv.Component.OnPingDocument().FilePath ) )
-"""
+from textGoo import TextGoo
+from pointGoo import PointGoo
+import ghpythonlib.treehelpers as th
 
 #debug
 import textGoo
