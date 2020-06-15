@@ -130,5 +130,6 @@ class DeBoorAlgorithmNurbs(object):
 
 ### main ###
 nurbs = DeBoorAlgorithmNurbs(degree, points, weights, knots, isPeriodic, isRational)
-curvePoints, pointAtU, deBoorPts, deBoorlines= nurbs.drawNurbsCurvePts(80,u)
-deBoorlines = th.list_to_tree( deBoorlines, source=[0,0])
+curvePoints, pointAtU, deBoorPts, colorlines= nurbs.drawNurbsCurvePts(80,u)
+deBoorlines = th.list_to_tree( colorlines, source=[0,0])
+
