@@ -5,9 +5,11 @@
 * Github源码下载: [https://github.com/caadxyz/DeBoorAlgorithmNurbs](https://github.com/caadxyz/DeBoorAlgorithmNurbs)
 * Supported by ikuku.cn & caad.xyz 
 
+[English](readme.md)
+
 # 这个插件能做什么?
 
-### 演示DeBoor的Nurbs算法
+### 演示Nurbs曲线的DeBoor算法
 
 仅仅靠自己的抽象想象力去理解不同的控制点位置(point)、权重向量(weight)和结点向量(knot)对NURBS曲线的影响是很难获得直观的理解与认识的. 
 
